@@ -4,10 +4,15 @@ root = true
 # All Files
 [*]
 charset = utf-8
-indent_style = tab
+indent_style = space
 indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
+max_line_length = off
+
+#ij_any_blank_lines_around_class = 2
+#ij_any_blank_lines_around_method = 2
+#ij_any_space_after_for_semicolon = false
 
 # Markdown Files
 [*.md]

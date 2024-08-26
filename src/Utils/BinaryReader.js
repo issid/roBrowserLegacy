@@ -250,13 +250,57 @@ define( ['./Struct', 'Vendors/text-encoding'], function( Struct, TextEncoding )
 			if (!(uint8 = this.getUint8())) {
 				break;
 			}
-			out += String.fromCharCode(uint8);
+			out += String.fromCharCode(uint8).toString();
 		}
 
 		this.offset = offset + len;
 		return out;
 	};
 
+	/**
+	 * Get hex Array
+	 * @param len
+	 * @returns {*[]}
+	 */
+	BinaryReader.prototype.readHex = function getHexArray( len )
+	{
+		var offset = this.offset + 0, i;
+		var uint8, out = [];
+
+		for (i = 0; i < len; ++i) {
+			try {
+				uint8 = this.getUint8();
+				out.push(uint8.toString().padStart(2, '0').toUpperCase());
+			} catch (e) {
+				console.error(e);
+			}
+		}
+
+		this.offset = offset + len;
+		return out;
+	}
+
+	/**
+	 *
+	 * @type {function(integer): *}
+	 */
+	BinaryReader.prototype.getLongPointer  =
+	BinaryReader.prototype.readLongPointer = function getLongPointer( len )
+	{
+		var offset = this.offset + 0;
+		var i, uint8, data = new Uint8Array(len);
+
+		for (i = 0; i < len; ++i) {
+			if (!(uint8 = this.getUint8())) {
+				break;
+			}
+			data[i] = uint8;
+		}
+
+		this.offset = offset + len;
+
+		return data;
+	};
 
 	/**
 	 * Structure reader in JS
@@ -271,6 +315,7 @@ define( ['./Struct', 'Vendors/text-encoding'], function( Struct, TextEncoding )
 		}
 
 		var list = struct._list;
+		var structs = struct._structs;
 		var name;
 		var out={}, current, keys;
 		var i, j, count;
@@ -285,11 +330,11 @@ define( ['./Struct', 'Vendors/text-encoding'], function( Struct, TextEncoding )
 			if (current.count > 1) {
 				out[name] = new Array(current.count);
 				for (i = 0; i < current.count; ++i) {
-					out[name][i] = this[ current.func ]();
+					out[name][i] = this[ current.func ](structs[name]);
 				}
 			}
 			else {
-				out[name] = this[ current.func ]();
+				out[name] = this[ current.func ](structs[name]);
 			}
 		}
 

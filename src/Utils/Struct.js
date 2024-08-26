@@ -34,16 +34,19 @@ define(function()
 		var i, count, total = 0, size, len;
 		var type, name, func;
 		var out = {};
-
+		var structs = {};
 		len = arguments.length;
 
 		for (i = 0; i < len; ++i) {
-
-			args     =   arguments[i].match(/(unsigned\s)?(bool|char|short|int|long|float|double)\s([a-zA-Z0-9_-]+)(\[(\d+)\])?;?/);
-			unsigned = !!args[1];
-			type     =   args[2].toLowerCase();
-			name     =   args[3];
-			count    =   args[5] ? parseInt(args[5], 10) : 1;
+            if (typeof arguments[i] === 'object') {
+                type = "struct"
+            } else {
+                args     =   arguments[i].match(/(unsigned\s)?(bool|char|short|int|long|float|double|struct)\s([a-zA-Z0-9_-]+)(\[(\d+)\])?;?/);
+                unsigned = !!args[1];
+                type     =   args[2].toLowerCase();
+                name     =   args[3];
+                count    =   args[5] ? parseInt(args[5], 10) : 1;
+            }
 
 			switch (type) {
 				case "bool":   size=1; func = "int8";    break;
@@ -53,6 +56,12 @@ define(function()
 				case "long":   size=4; func = "int32";   break;
 				case "float":  size=4; func = "float32"; break;
 				case "double": size=8; func = "float64"; break;
+				case "struct":
+                    func = "struct";
+                    size = arguments[i][Object.keys(arguments[i])[0]].size;
+                    name = Object.keys(arguments[i])[0]
+                    structs[name] = arguments[i][name];
+                    break;
 				default:
 					throw new Error("Struct() - Undefined type '" + type + "'.");
 			}
@@ -68,6 +77,7 @@ define(function()
 
 
 		this._list = out;
+		this._structs = structs;
 		this.size  = total;
 	}
 

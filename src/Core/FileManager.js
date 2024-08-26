@@ -268,7 +268,9 @@ define(function( require )
 	 */
 	FileManager.getHTTP = function GetHTTP( filename, callback )
 	{
-
+		if (!filename) {
+			return;
+		}
 		filename = filename.replace( /\\/g, '/');
 		var url  = filename.replace(/[^//]+/g, function(a){return encodeURIComponent(a);});
 
