@@ -123,6 +123,13 @@ define(function(require)
 		setTimeout(function(){
 			Events.process(100);
 		}, 10);
+
+		setTimeout(function(){
+			moveToDirectory('data\\model\\ÇÁ·ÐÅ×¶ó\\', true );
+			setTimeout(function(){
+				onObjectClick();
+			}, 10);
+		}, 1000);
 	};
 
 
@@ -823,7 +830,8 @@ define(function(require)
 		return function onObjectClick()
 		{
 			var ui    = Viewer.ui;
-			var path  = this.getAttribute('data-path').replace(/\\/g, '/');
+			// var path  = this.getAttribute('data-path').replace(/\\/g, '/');
+			var path  = 'data/model/ÇÁ·ÐÅ×¶ó/±³¿ª¼Ò.rsm';
 
 			// Show iframe
 			ui.find('#preview .box').css('top', (jQuery(window).height()-400)* 0.5 );

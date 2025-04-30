@@ -199,6 +199,7 @@ define(function(require)
 			data  = _model.compile();
 			count = data.meshes.length;
 			total = 0;
+			console.warn(_model);
 
 			// Extract meshes
 			for (i = 0, count = data.meshes.length; i < count; ++i) {
@@ -279,7 +280,7 @@ define(function(require)
 		mat4.identity( _modelView );
 		mat4.translate( _modelView, _modelView, [ 0, -_model.box.range[1]*0.1, -_model.box.range[1]*0.5-5 ] );
 		mat4.rotateX(  _modelView, _modelView, (15/180) * Math.PI );
-		mat4.rotateY(  _modelView, _modelView, ((tick)/1000*360/8) / 180 * Math.PI );
+		// mat4.rotateY(  _modelView, _modelView, ((tick)/1000*360/8) / 180 * Math.PI );
 
 		// Calculate normal mat
 		mat4.toInverseMat3( _modelView, _normalMat);
